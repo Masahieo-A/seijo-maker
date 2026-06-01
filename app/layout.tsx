@@ -5,7 +5,7 @@ import "./globals.css";
 const notoSansJP = Noto_Sans_JP({ subsets: ["latin"], weight: ["400","500","700","800"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "整序メーカー | 青松 English Tools",
+  title: "整序メーカー | English Hub",
   description: "整序問題（語句整序）を生成する英語学習ツール",
 };
 
@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ja" className={notoSansJP.className}>
       <body>
         <header style={{ background: "var(--app-accent)", color: "#fff", padding: "0.6rem 1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <a href="https://aomatsu-english-portal.vercel.app" style={{ color: "rgba(255,255,255,0.75)", fontSize: "0.8rem", textDecoration: "none" }}>🌿 青松 English Tools</a>
+          <a href="https://aomatsu-english-portal.vercel.app" style={{ color: "rgba(255,255,255,0.75)", fontSize: "0.8rem", textDecoration: "none" }}>🌿 English Hub</a>
           <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.8rem" }}>›</span>
           <span style={{ fontSize: "0.85rem", fontWeight: 600 }}>整序メーカー</span>
         </header>
@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <footer style={{ textAlign: "center", padding: "1.5rem", fontSize: "0.78rem", color: "var(--muted-foreground)", borderTop: "1px solid var(--border)" }}>
-          © 2025 青松 English Learning Tools
+          © 2025 English Hub
         </footer>
       </body>
     </html>
