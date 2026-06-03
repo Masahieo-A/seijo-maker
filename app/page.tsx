@@ -7,6 +7,7 @@ import LessonSelector from "@/components/LessonSelector";
 export default function HomePage() {
   const router = useRouter();
   const [data, setData] = useState<SentenceRearrangement[]>([]);
+  const [grade, setGrade] = useState("");
   const [lesson, setLesson] = useState("");
   const [part, setPart] = useState("");
   const [loading, setLoading] = useState(true);
@@ -19,15 +20,22 @@ export default function HomePage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const lessons = useMemo(() => Array.from(new Set(data.map((d) => d.lesson))).sort(), [data]);
+  const grades = useMemo(() => Array.from(new Set(data.map((d) => d.grade))).sort(), [data]);
+  const lessons = useMemo(() => {
+    if (!grade) return [];
+    return Array.from(new Set(data.filter((d) => d.grade === grade).map((d) => d.lesson))).sort();
+  }, [data, grade]);
   const parts = useMemo(() => {
-    if (!lesson) return [];
-    return Array.from(new Set(data.filter((d) => d.lesson === lesson).map((d) => d.part))).sort();
-  }, [data, lesson]);
+    if (!grade || !lesson) return [];
+    return Array.from(
+      new Set(data.filter((d) => d.grade === grade && d.lesson === lesson).map((d) => d.part))
+    ).sort();
+  }, [data, grade, lesson]);
 
+  useEffect(() => { setLesson(""); setPart(""); }, [grade]);
   useEffect(() => { setPart(""); }, [lesson]);
 
-  const canStart = lesson && part;
+  const canStart = grade && lesson && part;
 
   return (
     <div style={{ maxWidth: 560, margin: "0 auto" }}>
@@ -48,14 +56,15 @@ export default function HomePage() {
           <p style={{ color: "var(--muted-foreground)", textAlign: "center", fontSize: "0.9rem" }}>データがまだ登録されていません。</p>
         ) : (
           <>
-            <LessonSelector label="レッスン" options={lessons} value={lesson} onChange={setLesson} />
+            <LessonSelector label="学年" options={grades} value={grade} onChange={setGrade} />
+            <LessonSelector label="レッスン" options={lessons} value={lesson} onChange={setLesson} disabled={!grade} />
             <LessonSelector label="パート" options={parts} value={part} onChange={setPart} disabled={!lesson} />
           </>
         )}
       </div>
 
       <button
-        onClick={() => { if (canStart) router.push(`/test?lesson=${encodeURIComponent(lesson)}&part=${encodeURIComponent(part)}`); }}
+        onClick={() => { if (canStart) router.push(`/test?grade=${encodeURIComponent(grade)}&lesson=${encodeURIComponent(lesson)}&part=${encodeURIComponent(part)}`); }}
         disabled={!canStart}
         style={{
           width: "100%", padding: "1rem", borderRadius: "0.75rem", border: "none",

@@ -1,5 +1,6 @@
 export type SentenceRearrangement = {
   id: number;
+  grade: string;
   lesson: string;
   part: string;
   title?: string | null;

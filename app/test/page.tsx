@@ -48,6 +48,7 @@ const chipBase: React.CSSProperties = {
 function TestContent() {
   const router = useRouter();
   const params = useSearchParams();
+  const grade = params.get("grade") ?? "";
   const lesson = params.get("lesson") ?? "";
   const part = params.get("part") ?? "";
 
@@ -61,13 +62,13 @@ function TestContent() {
       .then((r) => r.json() as Promise<SentenceRearrangement[]>)
       .then((data) => {
         const filtered = data
-          .filter((d) => d.lesson === lesson && d.part === part)
+          .filter((d) => d.grade === grade && d.lesson === lesson && d.part === part)
           .sort((a, b) => a.seq - b.seq);
         setQuestions(buildInitialState(filtered));
       })
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, [lesson, part]);
+  }, [grade, lesson, part]);
 
   const moveToAnswer = useCallback((qIdx: number, token: Token) => {
     if (scored) return;
@@ -145,7 +146,7 @@ function TestContent() {
     <div style={{ paddingBottom: "6rem" }}>
       {/* Header */}
       <div style={{ marginBottom: "1.75rem" }}>
-        <p style={{ fontSize: "0.82rem", color: "var(--muted-foreground)", marginBottom: "0.25rem" }}>{lesson} / {part}</p>
+        <p style={{ fontSize: "0.82rem", color: "var(--muted-foreground)", marginBottom: "0.25rem" }}>{grade} / {lesson} / {part}</p>
         <h2 style={{ fontSize: "1.35rem", fontWeight: 800, color: "var(--app-accent)" }}>整序問題</h2>
         <p style={{ fontSize: "0.85rem", color: "var(--muted-foreground)" }}>単語をクリックして正しい順に並べてください</p>
       </div>

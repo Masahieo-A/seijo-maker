@@ -31,6 +31,7 @@ const lines = raw.split(/\r?\n/).filter(Boolean);
 const headers = parseCSVLine(lines[0]).map(h => h.trim().toUpperCase());
 const idxOf = (key) => headers.indexOf(key);
 
+const GRADE    = idxOf("GRADE");
 const LESSON   = idxOf("LESSON");
 const PART     = idxOf("PART");
 const TITLE    = idxOf("TITLE");
@@ -38,9 +39,9 @@ const SEQ      = idxOf("SEQ");
 const SENTENCE = idxOf("SENTENCE");
 const TRANS    = idxOf("TRANS");
 
-if (LESSON < 0 || PART < 0 || SENTENCE < 0) {
+if (GRADE < 0 || LESSON < 0 || PART < 0 || SENTENCE < 0) {
   console.error("❌  CSV のヘッダーが正しくありません。");
-  console.error("   必須列: LESSON, PART, SENTENCE");
+  console.error("   必須列: GRADE, LESSON, PART, SENTENCE");
   console.error(`   検出されたヘッダー: ${headers.join(", ")}`);
   process.exit(1);
 }
@@ -50,12 +51,14 @@ let id = 1;
 
 for (let i = 1; i < lines.length; i++) {
   const cols = parseCSVLine(lines[i]);
+  const grade    = cols[GRADE]?.trim();
   const lesson   = cols[LESSON]?.trim();
   const sentence = cols[SENTENCE]?.trim();
-  if (!lesson || !sentence) continue; // 空行スキップ
+  if (!grade || !lesson || !sentence) continue; // 空行スキップ
 
   result.push({
     id: id++,
+    grade,
     lesson,
     part:     cols[PART]?.trim()  || "",
     title:    cols[TITLE]?.trim() || null,
